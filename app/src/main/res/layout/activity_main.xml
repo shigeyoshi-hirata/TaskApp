@@ -8,20 +8,65 @@
         android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/select_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"/>
+
+
+            <Button
+                android:id="@+id/select_button"
+                android:text="絞り込み"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"/>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
     <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
-
-    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/plus"
-            app:backgroundTint="@color/colorPrimary"/>
+            android:layout_below="@+id/select_button"/>
+
+
+    </LinearLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/plus"
+                app:backgroundTint="@color/colorPrimary"/>
+
+
 
 </android.support.design.widget.CoordinatorLayout>

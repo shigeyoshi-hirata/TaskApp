@@ -8,6 +8,12 @@ import io.realm.RealmChangeListener
 import io.realm.Sort
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.util.Log
+
+
 // import android.support.design.widget.Snackbar
 // import java.util.*
 
@@ -37,8 +43,48 @@ class MainActivity : AppCompatActivity() {
         mRealm = Realm.getDefaultInstance()
         mRealm.addChangeListener(mRealmListener)
 
+
         // ListViewの設定
         mTaskAdapter = TaskAdapter(this@MainActivity)
+
+
+
+
+
+
+
+
+
+
+
+        //絞り込みの処理追加
+
+        select_button.setOnClickListener {
+
+            val selectword = select_text.text.toString()
+
+            if (selectword.isNullOrEmpty()) {
+
+                reloadListView()
+
+
+             } else {
+
+                val taskRealmResults = mRealm.where(Task::class.java).equalTo("category", selectword).findAll()
+
+                // 上記の結果を、TaskListとしてセットする
+                mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+
+                // TaskのListView用のアダプタに渡す
+                listView1.adapter = mTaskAdapter
+
+                // 表示を更新するために、アダプターにデータが更新されたことを知らせる
+                mTaskAdapter.notifyDataSetChanged()
+
+            }
+        }
+
+
 
         // ListViewをタップしたときの処理
         listView1.setOnItemClickListener { parent, _, position, _ ->
@@ -66,6 +112,17 @@ class MainActivity : AppCompatActivity() {
                 mRealm.beginTransaction()
                 results.deleteAllFromRealm()
                 mRealm.commitTransaction()
+
+                val resultIntent = Intent(applicationContext, TaskAlarmReceiver::class.java)
+                val resultPendingIntent = PendingIntent.getBroadcast(
+                    this@MainActivity,
+                    task.id,
+                    resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
+                val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.cancel(resultPendingIntent)
 
                 reloadListView()
             }
